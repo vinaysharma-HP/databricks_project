@@ -1,33 +1,40 @@
 # Bike Data Lakehouse
 
-A data engineering project built on **Databricks Community Edition** that processes bike sales data using the **Medallion Architecture** (Bronze → Silver → Gold).
+A data engineering project built on **Databricks Community Edition** that processes bike sales data from CRM and ERP systems using the **Medallion Architecture** (Bronze → Silver → Gold).
 
 ---
 
 ## What This Project Does
 
-Raw bike sales data from CRM and ERP source systems is ingested and progressively cleaned and transformed across three layers until it is ready for business reporting and analysis.
+Ingests raw bike sales data from two source systems (CRM and ERP), cleans and standardizes it in the Silver layer, and builds business-ready dimension and fact tables in the Gold layer for reporting and analysis.
 
 ---
 
 ## Architecture
 
 ```
-Raw Data  →  Bronze  →  Silver  →  Gold
+CRM & ERP Raw Data
+        │
+        ▼
+🥉 Bronze  →  Raw data stored as-is
+        │
+        ▼
+🥈 Silver  →  Cleaned, renamed, normalized
+        │
+        ▼
+🥇 Gold    →  Dimension & fact tables for reporting
 ```
-
-- **Bronze** — Raw data ingested as-is from source systems (CRM & ERP)
-- **Silver** — Data cleaned, nulls removed, formats standardized per source
-- **Gold** — Final business-ready tables for reporting and analysis
 
 ---
 
 ## Tools & Technologies
 
-- **Databricks Community Edition** — Notebook environment & cluster
-- **Apache Spark / PySpark** — Data processing and transformations
-- **Delta Lake** — Reliable data storage with ACID transactions
-- **Python & SQL** — Transformations and queries
+| Tool | Purpose |
+|------|---------|
+| **Databricks Community Edition** | Notebook environment & Spark cluster |
+| **Apache Spark / PySpark** | Distributed data transformations |
+| **Delta Lake** | ACID-compliant data storage |
+| **Python & SQL** | Data processing and querying |
 
 ---
 
@@ -57,12 +64,33 @@ databricks_project/
 
 ---
 
+## Layer Details
+
+### 🥉 Bronze — Raw Ingestion
+- Loads raw data from CRM and ERP source systems
+- No transformations applied
+- Data preserved as-is for reprocessing if needed
+
+### 🥈 Silver — Data Cleaning & Standardization
+Applied the following transformations on each source:
+- **Removed nulls** — dropped or handled missing values
+- **Renamed columns** — standardized column names across CRM and ERP sources
+- **Trimmed whitespace** — cleaned leading/trailing spaces in string fields
+- **Normalization** — standardized formats for dates, categories, and text fields
+
+### 🥇 Gold — Business Layer
+- **Gold_customers** — Unified customer dimension combining CRM and ERP data
+- **Gold_products** — Product dimension with category and pricing info
+- **Gold_fact_sales** — Sales fact table ready for reporting and analysis
+
+---
+
 ## How to Run
 
 1. Upload notebooks to **Databricks Community Edition**
 2. Attach to a running cluster
-3. Run notebooks in this order:
-   - `Bronze.ipynb` → All Silver notebooks → All Gold notebooks
+3. Run in this order:
+   - `Bronze.ipynb` → Silver notebooks (all 6) → Gold notebooks (all 3)
 
 ---
 
