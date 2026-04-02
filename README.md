@@ -6,7 +6,7 @@ A data engineering project built on **Databricks Community Edition** that proces
 
 ## What This Project Does
 
-Raw bike sales data is ingested and progressively cleaned and transformed across three layers until it is ready for business reporting and analysis.
+Raw bike sales data from CRM and ERP source systems is ingested and progressively cleaned and transformed across three layers until it is ready for business reporting and analysis.
 
 ---
 
@@ -16,8 +16,8 @@ Raw bike sales data is ingested and progressively cleaned and transformed across
 Raw Data  →  Bronze  →  Silver  →  Gold
 ```
 
-- **Bronze** — Raw data ingested as-is, no changes
-- **Silver** — Data cleaned, nulls removed, formats standardized
+- **Bronze** — Raw data ingested as-is from source systems (CRM & ERP)
+- **Silver** — Data cleaned, nulls removed, formats standardized per source
 - **Gold** — Final business-ready tables for reporting and analysis
 
 ---
@@ -35,13 +35,23 @@ Raw Data  →  Bronze  →  Silver  →  Gold
 
 ```
 databricks_project/
+│
 ├── bronze/
-│   └── Bronze.ipynb
+│   └── Bronze.ipynb                    # Raw ingestion from CRM & ERP sources
+│
 ├── silver/
-│   └── Silver.ipynb
+│   ├── Silver_crm_cust_info.ipynb      # CRM customer information
+│   ├── Silver_crm_prd_info.ipynb       # CRM product information
+│   ├── Silver_crm_sales_details.ipynb  # CRM sales transactions
+│   ├── Silver_erp_loc_a101.ipynb       # ERP location data
+│   ├── Silver_erp_cust_az12.ipynb      # ERP customer data
+│   └── Silver_erp_px_cat_g1v2.ipynb    # ERP product category data
+│
 ├── gold/
-│   ├── Gold_customers.ipynb
-│   └── Gold_fact_sales.ipynb
+│   ├── Gold_customers.ipynb            # Customer dimension table
+│   ├── Gold_fact_sales.ipynb           # Sales fact table
+│   └── Gold_products.ipynb             # Product dimension table
+│
 └── README.md
 ```
 
@@ -52,7 +62,7 @@ databricks_project/
 1. Upload notebooks to **Databricks Community Edition**
 2. Attach to a running cluster
 3. Run notebooks in this order:
-   - Bronze → Silver → Gold
+   - `Bronze.ipynb` → All Silver notebooks → All Gold notebooks
 
 ---
 
